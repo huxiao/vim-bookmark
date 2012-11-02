@@ -1,6 +1,6 @@
 " Name: Vim bookmark
 " Author: Name5566 <name5566@gmail.com>
-" Version: 0.2.3
+" Version: 0.2.4
 
 if exists('loaded_vbookmark')
 	finish
@@ -33,11 +33,23 @@ function! s:Vbookmark_jumpSign(id, file)
 		\ . ' file=' . a:file
 endfunction
 
+function! s:Vbookmark_isSignIdExist(id)
+	for mark in s:vbookmark_bookmarks
+		if mark.id == a:id
+			return 1
+		endif
+	endfor
+	return 0
+endfunction
+
+" TODO: optimizing
 function! s:Vbookmark_generateSignId()
 	if !exists('s:vbookmark_signSeed')
 		let s:vbookmark_signSeed = 201210
 	endif
-	let s:vbookmark_signSeed += 1
+	while s:Vbookmark_isSignIdExist(s:vbookmark_signSeed)
+		let s:vbookmark_signSeed += 1
+	endwhile
 	return s:vbookmark_signSeed
 endfunction
 
@@ -127,6 +139,12 @@ function! s:Vbookmark_jumpBookmark(method)
 	try
 		call s:Vbookmark_jumpSign(mark.id, mark.file)
 	catch
+		if !filereadable(mark.file)
+			call remove(s:vbookmark_bookmarks, s:vbookmark_curMarkIndex)
+			call s:Vbookmark_adjustCurMarkIndex()
+			call s:Vbookmark_jumpBookmark(a:method)
+			return
+		endif
 		exec 'e ' . mark.file
 		call s:Vbookmark_refreshSign(mark.file)
 		call s:Vbookmark_jumpSign(mark.id, mark.file)
