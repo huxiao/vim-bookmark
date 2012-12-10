@@ -8,6 +8,7 @@ Vim bookmark 是一个 Vim 的书签插件。此插件的特点:
  * 书签组的支持
 
 Vim bookmark 截图：
+
 ![vim-bookmark image][vim-bookmark-img]
 
 
@@ -41,6 +42,6 @@ Vim bookmark 截图：
     " 使用 Visual Stdio 书签的按键方式
     nnoremap <silent> <C-F2> :VbookmarkToggle<CR>
     nnoremap <silent> <F2> :VbookmarkNext<CR>
-    nnoremap <silent> <S-F2> :VbookmarkPrevious<CR></F>
+    nnoremap <silent> <S-F2> :VbookmarkPrevious<CR>
 
 [vim-bookmark-img]:http://name5566.com/wp-content/uploads/2012/09/vbookmark.png
